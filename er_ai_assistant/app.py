@@ -331,7 +331,6 @@ with tab5:
         st.info("⚠️ Aucun cas disponible pour l’exploration.")
 import os
 import json
-
 with tab6:
     st.subheader("📂 Dossiers patients enregistrés")
 
@@ -345,12 +344,14 @@ with tab6:
         except:
             continue
 
+        nom_patient = fiche.get("nom", f"dossier_{dossier}")
+
         st.markdown("---")
-        st.markdown(f"### 🧑 {fiche['nom']} — 🕒 {fiche['heure']}")
-        st.markdown(f"🔍 Motif : `{fiche['symptôme']}`")
+        st.markdown(f"### 🧑 {nom_patient} — 🕒 {fiche.get('heure', '—')}")
+        st.markdown(f"🔍 Motif : `{fiche.get('symptôme', '—')}`")
         st.markdown(f"🧠 Système AI : `{fiche.get('système', '—')}`")
-        st.markdown(f"📊 Gravité : `{fiche['gravité']}/5` — ESI : `{fiche['esi']}`")
-        st.markdown(f"⚠️ Red Flag : `{fiche['red_flag']}`")
+        st.markdown(f"📊 Gravité : `{fiche.get('gravité', '-')}/5` — ESI : `{fiche.get('esi', '-')}`")
+        st.markdown(f"⚠️ Red Flag : `{fiche.get('red_flag', '—')}`")
         st.markdown(f"👨‍⚕️ Médecin : `{fiche.get('médecin', '—')}`")
         st.markdown(f"📈 Scores : `{fiche.get('scores', {})}`")
 
@@ -366,31 +367,30 @@ with tab6:
             except:
                 st.warning("⚠️ Fichier examens illisible.")
 
-        # 📄 Export PDF bouton (clé unique)
-        if st.button(f"📤 Exporter la fiche PDF de {fiche['nom']}", key=f"btn_pdf_{dossier}"):
+        # 📄 Export PDF bouton — clé unique par dossier
+        bouton_pdf_key = f"btn_pdf_{dossier}"
+        if st.button(f"📤 Exporter la fiche PDF de {nom_patient}", key=bouton_pdf_key):
             from export_pdf import exporter_pdf
             exporter_pdf(os.path.join("patients", dossier))
-            st.success("📄 Fiche PDF exportée dans le dossier patient.")
+            st.success(f"📄 Fiche PDF de `{nom_patient}` exportée dans le dossier.")
 
     st.markdown("---")
 
-    # 📦 Lecture CSV sécurisée
-    st.markdown("### 📊 Cas enregistrés avec Red Flags")
-    import os
+    # 📦 Lecture sécurisée du fichier CSV
+    st.markdown("### 📊 Cas Red Flags enregistrés (CSV)")
     csv_path = "data/red_flags.csv"
-
     if os.path.exists(csv_path):
         try:
             df = pd.read_csv(csv_path)
             st.success("✅ Fichier CSV chargé avec succès.")
             st.dataframe(df.head())
         except Exception as e:
-            st.error(f"❌ Erreur lors de la lecture du CSV : {e}")
+            st.error(f"❌ Erreur de lecture CSV : {e}")
     else:
-        st.warning("⚠️ Fichier CSV introuvable — aucune donnée chargée.")
+        st.warning("⚠️ Fichier CSV `red_flags.csv` introuvable dans le dossier `data/`.")
 
-    # 📦 Export CSV global (clé unique)
-    if st.button("📦 Exporter tous les dossiers en CSV", key="btn_export_csv"):
+    # 📁 Export CSV global — clé unique hors boucle
+    if st.button("📦 Exporter tous les dossiers en CSV", key="btn_export_all_csv"):
         from export_csv import exporter_all_csv
         exporter_all_csv()
-        st.success("✅ Tous les dossiers exportés dans `data/dossiers_export.csv`")
+        st.success("📁 Dossiers exportés dans `data/dossiers_export.csv`")
