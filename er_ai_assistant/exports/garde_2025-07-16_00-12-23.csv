@@ -1,0 +1,6 @@
+﻿âge,symptôme,vital,triage,red_flag,gravité,esi,examens,heure
+30,agitation,BP 220/110,Signes vitaux critiques,Hypertension sévère détectée (220/110),4,2,"ECG, bilan rénal, antihypertenseur IV",00:09:01
+30,trouble de la marche,saturation 85%,Urgence détectée,Embolie pulmonaire,4,2,Angio-TDM thoracique,00:09:59
+30,douleur thoracique,ecg st +,Non détecté,⚠️ Aucun red flag identifié,0,5,Évaluation clinique recommandée,00:10:51
+30,douleur thoracique,ECG ST +,Non détecté,⚠️ Aucun red flag identifié,0,5,Évaluation clinique recommandée,00:11:11
+30,douleur thoracique,ECG ST+,Urgence détectée,Infarctus ST+ (Cardio),5,1,"ECG, Troponines, Coronarographie",00:11:24

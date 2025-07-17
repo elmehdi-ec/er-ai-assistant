@@ -1,0 +1,14 @@
+{
+    "nom": "ahmed ahmed",
+    "âge": 30,
+    "symptôme": "agitation",
+    "vital": "BP 120/80",
+    "triage": "Non détecté",
+    "gravité": 0,
+    "esi": 5,
+    "red_flag": "⚠️ Aucun red flag identifié",
+    "examens": "Évaluation clinique recommandée",
+    "heure": "00:34:39",
+    "scores": {},
+    "suggestions_ai": ""
+}

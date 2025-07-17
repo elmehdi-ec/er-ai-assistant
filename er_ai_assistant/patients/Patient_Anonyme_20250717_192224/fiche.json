@@ -1,0 +1,29 @@
+{
+    "nom": "",
+    "âge": 27,
+    "symptôme": "douleur de la fosse iliaque droite\n",
+    "vital": {
+        "FR": 18,
+        "FC": 100,
+        "PA": "120/80",
+        "SpO2": 98,
+        "Température": 39.0,
+        "GCS": 15,
+        "Glycémie": 1.0,
+        "EVA": 8,
+        "Diurèse": 800,
+        "Pupilles": "Réactives",
+        "Paralysie": "Non"
+    },
+    "triage": "Standard",
+    "gravité": 2,
+    "esi": 3,
+    "red_flag": "⚠️ Douleur intense (Algique)",
+    "examens": "Analgesie, Imagerie localisée",
+    "heure": "19:22:24",
+    "scores": {
+        "NEWS2": 0,
+        "qSOFA": 0
+    },
+    "suggestions_ai": "Orientation vers prise en charge Algique"
+}

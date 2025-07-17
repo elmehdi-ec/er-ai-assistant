@@ -1,0 +1,29 @@
+{
+    "nom": "",
+    "âge": 30,
+    "symptôme": "agitation",
+    "vital": {
+        "FR": 18,
+        "FC": 80,
+        "PA": "120/80",
+        "SpO2": 98,
+        "Température": 37.0,
+        "GCS": 15,
+        "Glycémie": 1.0,
+        "EVA": 5,
+        "Diurèse": 800,
+        "Pupilles": "Réactives",
+        "Paralysie": "Non"
+    },
+    "triage": "Standard",
+    "gravité": 1,
+    "esi": 5,
+    "red_flag": "✅ Stable (Général)",
+    "examens": "Surveillance, Examens complémentaires",
+    "heure": "01:00:57",
+    "scores": {
+        "NEWS2": 0,
+        "qSOFA": 0
+    },
+    "suggestions_ai": "Orientation vers prise en charge Général"
+}
