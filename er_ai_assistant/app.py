@@ -372,10 +372,25 @@ with tab6:
             exporter_pdf(os.path.join("patients", dossier))
             st.success("📄 Fiche PDF exportée dans le dossier patient.")
 
-    # 📦 Export CSV global (clé unique en dehors de la boucle)
     st.markdown("---")
+
+    # 📦 Lecture CSV sécurisée
+    st.markdown("### 📊 Cas enregistrés avec Red Flags")
+    import os
+    csv_path = "data/red_flags.csv"
+
+    if os.path.exists(csv_path):
+        try:
+            df = pd.read_csv(csv_path)
+            st.success("✅ Fichier CSV chargé avec succès.")
+            st.dataframe(df.head())
+        except Exception as e:
+            st.error(f"❌ Erreur lors de la lecture du CSV : {e}")
+    else:
+        st.warning("⚠️ Fichier CSV introuvable — aucune donnée chargée.")
+
+    # 📦 Export CSV global (clé unique)
     if st.button("📦 Exporter tous les dossiers en CSV", key="btn_export_csv"):
         from export_csv import exporter_all_csv
         exporter_all_csv()
         st.success("✅ Tous les dossiers exportés dans `data/dossiers_export.csv`")
-
