@@ -77,12 +77,6 @@ if mdp != "1234":
     st.warning("Accès restreint.")
     st.stop()
 
-try:
-    df = pd.read_csv("data/red_flags.csv", encoding="utf-8-sig")
-    symptom_list = sorted(df["Symptôme_Déclencheur"].dropna().unique())
-except:
-    st.error("⚠️ Fichier CSV introuvable.")
-    st.stop()
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "👤 Évaluation", "📋 Prise en charge", "📋 File", "📊 Statistiques", "📚 Fiches urgentes", "📂 Dossiers patients"
 ])
