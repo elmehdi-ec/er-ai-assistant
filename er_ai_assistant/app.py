@@ -326,65 +326,67 @@ with tab5:
 import os
 import json 
 if st.session_state.get("authentifie"):  # ✅ Vérifie que l'utilisateur est connecté
-    with tab6:
-        st.subheader("📂 Dossiers patients enregistrés")
+with tab6:
+    st.subheader("📂 Dossiers patients enregistrés")
 
+    if os.path.exists("patients"):
         dossiers = os.listdir("patients")
-        dossiers.sort()
+    else:
+        dossiers = []
 
-        for dossier in dossiers:
+    if dossiers == []:
+        st.info("📭 Aucun dossier patient pour le moment.")
+
+    dossiers.sort()
+
+    for dossier in dossiers:
+        try:
+            with open(os.path.join("patients", dossier, "fiche.json"), encoding="utf-8") as f:
+                fiche = json.load(f)
+        except:
+            continue
+
+        nom_patient = fiche.get("nom", f"dossier_{dossier}")
+        st.markdown("---")
+        st.markdown(f"### 🧑 {nom_patient} — 🕒 {fiche.get('heure', '—')}")
+        st.markdown(f"🔍 Motif : `{fiche.get('symptôme', '—')}`")
+        st.markdown(f"⚠️ Red Flag : `{fiche.get('red_flag', '—')}`")
+        st.markdown(f"👨‍⚕️ Médecin : `{fiche.get('médecin', '—')}`")
+        st.markdown(f"📊 Gravité : `{fiche.get('gravité', '-')}/5` — ESI : `{fiche.get('esi', '-')}`")
+        st.markdown(f"📈 Scores : `{fiche.get('scores', {})}`")
+        st.markdown(f"🧠 Système : `{fiche.get('système', '—')}`")
+
+        examens_path = os.path.join("patients", dossier, "examens.json")
+        if os.path.exists(examens_path):
             try:
-                with open(os.path.join("patients", dossier, "fiche.json"), encoding="utf-8") as f:
-                    fiche = json.load(f)
-            except:
-                continue
-
-            nom_patient = fiche.get("nom", f"dossier_{dossier}")
-            st.markdown("---")
-            st.markdown(f"### 🧑 {nom_patient} — 🕒 {fiche.get('heure', '—')}")
-            st.markdown(f"🔍 Motif : `{fiche.get('symptôme', '—')}`")
-            st.markdown(f"⚠️ Red Flag : `{fiche.get('red_flag', '—')}`")
-            st.markdown(f"👨‍⚕️ Médecin : `{fiche.get('médecin', '—')}`")
-            st.markdown(f"📊 Gravité : `{fiche.get('gravité', '-')}/5` — ESI : `{fiche.get('esi', '-')}`")
-            st.markdown(f"📈 Scores : `{fiche.get('scores', {})}`")
-            st.markdown(f"🧠 Système : `{fiche.get('système', '—')}`")
-
-            examens_path = os.path.join("patients", dossier, "examens.json")
-            if os.path.exists(examens_path):
-                try:
-                    with open(examens_path, encoding="utf-8") as f:
-                        examens = json.load(f)
+                with open(examens_path, encoding="utf-8") as f:
+                    examens = json.load(f)
                     st.markdown("### 🧪 Examens complémentaires :")
                     st.markdown(f"- Type(s) : `{examens.get('types', [])}`")
                     st.markdown(f"- Résumé : `{examens.get('résumé', '')}`")
-                except:
-                    st.warning("⚠️ Fichier examens illisible.")
+            except:
+                st.warning("⚠️ Fichier examens illisible.")
 
-            key_pdf = f"btn_pdf_{dossier}"
-            if st.button(f"📤 Exporter PDF : {nom_patient}", key=key_pdf):
-                from export_pdf import exporter_pdf
-                exporter_pdf(os.path.join("patients", dossier))
-                st.success("✅ PDF exporté.")
+        key_pdf = f"btn_pdf_{dossier}"
+        if st.button(f"📤 Exporter PDF : {nom_patient}", key=key_pdf):
+            from export_pdf import exporter_pdf
+            exporter_pdf(os.path.join("patients", dossier))
+            st.success("✅ PDF exporté.")
 
-        st.markdown("---")
+    # 📊 Lecture sécurisée du fichier CSV
+    csv_path = "data/red_flags.csv"
+    if os.path.exists(csv_path) and os.path.getsize(csv_path) > 0:
+        try:
+            df = pd.read_csv(csv_path)
+            st.success("📦 Fichier CSV chargé avec succès.")
+            st.dataframe(df.head())
+        except Exception as e:
+            st.error(f"❌ Erreur lecture CSV : {e}")
+    else:
+        st.warning("⚠️ Fichier CSV `red_flags.csv` absent ou vide.")
 
-        # 📊 Lecture sécurisée du fichier red_flags.csv
-        csv_path = "data/red_flags.csv"
-        if os.path.exists(csv_path) and os.path.getsize(csv_path) > 0:
-            try:
-                df = pd.read_csv(csv_path)
-                st.success("📦 Fichier CSV chargé avec succès.")
-                st.dataframe(df.head())
-            except Exception as e:
-                st.error(f"❌ Erreur lecture CSV : {e}")
-        else:
-            st.warning("⚠️ Fichier CSV `red_flags.csv` absent ou vide.")
-
-        # 📁 Export CSV global
-        if st.button("📦 Exporter tous les dossiers en CSV", key="btn_export_all_csv"):
-            from export_csv import exporter_all_csv
-            exporter_all_csv()
-            st.success("📁 Dossiers exportés dans `data/dossiers_export.csv`")
-
-else:
-    st.warning("🔒 Vous devez vous connecter pour accéder aux dossiers.")
+    # 📥 Export CSV global
+    if st.button("📥 Exporter tous les dossiers en CSV", key="btn_export_all_csv"):
+        from export_csv import exporter_all_csv
+        exporter_all_csv()
+        st.success("📁 Dossiers exportés dans `data/dossiers_export.csv`")
