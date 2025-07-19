@@ -331,7 +331,7 @@ with tab5:
         st.info("⚠️ Aucun cas disponible pour l’exploration.")
 import os
 import json 
-if st.session_state.get("authentifie"):  # 👨‍⚕️ Vérifie que l'utilisateur est connecté
+
 if st.session_state.get("authentifie"):  # 👨‍⚕️ Vérifie que le médecin est connecté
     with tab6:
         st.subheader("📂 Dossiers patients enregistrés")
